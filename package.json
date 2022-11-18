@@ -18,5 +18,13 @@
   "bugs": {
     "url": "https://github.com/eliqwamo/storeapi/issues"
   },
-  "homepage": "https://github.com/eliqwamo/storeapi#readme"
+  "homepage": "https://github.com/eliqwamo/storeapi#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.25.6"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
 }
