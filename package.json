@@ -1,7 +1,7 @@
 {
   "name": "storeapi",
   "version": "1.0.0",
-  "description": "",
+  "description": "This is my StoreApi",
   "main": "index.js",
   "type": "module",
   "scripts": {
