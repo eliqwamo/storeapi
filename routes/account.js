@@ -2,6 +2,8 @@ import express from 'express';
 const router = express.Router();
 import bcryptjs from 'bcryptjs';
 import Account from '../models/account.js';
+import jwt from 'jsonwebtoken';
+import isAuth from './auth.js';
 
 //CRUD :: Create Read Update Delete
 
@@ -87,18 +89,58 @@ router.put('/verify', async(req,res) => {
 //FRIDAY
 router.post('/login', async(req,res) => {
     //Get data
+    const {email,password} = req.body;
     //Check if exist
-    //Check password
-    //Check if account verified
-    //Create Token
-    //Response
+    Account.findAll({where: {email:email}})
+    .then(async accounts => {
+        if(accounts.length > 0){
+            const user = accounts[0];
+            //Check password
+            const isMatch = await bcryptjs.compare(password, user.password);
+            if(isMatch ){
+                //Check if account verified
+                if(user.isApproved){
+                    //Create Token
+                    const data = {
+                        id: user.id,
+                        name: user.firstName + ' ' + user.lastName,
+                        email: user.email
+                    }
+                    const token = await jwt.sign({data}, 'tQEai5iis6QBHpNfXLg5NALzAK0GS6Ee');
+                    return res.status(200).json({
+                        user: user,
+                        token: token
+                    })
+
+                    //Response
+                } else {
+                    return res.status(200).json({
+                        message: 'Account was not verified'
+                    })
+                }
+            } else {
+                return res.status(200).json({
+                    message: 'Password not match'
+                })
+            }
+        } else {
+            return res.status(200).json({
+                message: 'Account not found'
+            })
+        }
+    })
+    .catch(error => {
+        return res.status(500).json({
+            message: error.message
+        })
+    })
+
 })
 
 
-
-
 //GET ALL ACCOUNTS
-router.get('/get_all_users', async(req, res) => {
+router.get('/get_all_users', isAuth, async(req, res) => {
+
     Account.findAll()
     .then(users => {
         return res.status(200).json({
@@ -112,9 +154,13 @@ router.get('/get_all_users', async(req, res) => {
     })
 })
 
+
 //UPDATE ACCOUNT
-router.put('/update_account', async(req,res) => {
-    const {id,firstName,lastName} = req.body;
+router.put('/update_account', isAuth, async(req,res) => {
+
+    const id = req.account.id;
+
+    const {firstName,lastName} = req.body;
     Account.findByPk(id)
     .then(account => {
         account.firstName = firstName;
@@ -139,7 +185,7 @@ router.put('/update_account', async(req,res) => {
 })
 
 //DELETE ACCOUNT
-router.delete('/delete_account/:accountid', async(req,res) => {
+router.delete('/delete_account/:accountid', isAuth,  async(req,res) => {
     const x = req.params.accountid;
     Account.findByPk(x)
     .then(account => {
@@ -157,7 +203,7 @@ router.delete('/delete_account/:accountid', async(req,res) => {
     })
 })
 
-router.get('/getAccountById/:accountId', async(req,res) => {
+router.get('/getAccountById/:accountId', isAuth, async(req,res) => {
     const id = req.params.accountId;
     Account.findByPk(id)
     .then(account => {
@@ -171,10 +217,6 @@ router.get('/getAccountById/:accountId', async(req,res) => {
         })
     })
 })
-
-
-
-
 
 
 function generateRandomIntegerInRange(min, max) {
