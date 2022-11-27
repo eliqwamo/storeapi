@@ -1,5 +1,6 @@
 import express from 'express';
 import Accounts from './routes/account.js';
+import Company from './routes/company.js';
 import Store from './routes/store.js';
 import Database from './database.js';
 
@@ -8,6 +9,7 @@ const app = express();
 app.use(express.json());
 
 app.use('/api/account', Accounts);
+app.use('/api/company', Company);
 app.use('/api/store', Store);
 
 const port = 3001;
