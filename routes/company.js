@@ -4,8 +4,37 @@ import Category from '../models/category.js';
 import Company from '../models/company.js';
 import isAuth from './auth.js';
 
+/**
+ * @swagger
+ * definitions:
+ *  Category:
+ *   type: object
+ *   properties:
+ *    categoryName:
+ *     type: string,
+ *     description: The name of the category
+ *     example: Fashion  
+ */
 
-////////////////////////////////////////////CATEGORY
+
+/**
+ * @swagger
+ * /api/company/create_category:
+ *  post:
+ *   summary: Create new category
+ *   description: Use this route to create new category
+ *   tags: [Store]
+ *   requestBody:
+ *    content:
+ *     application/json:
+ *      schema:
+ *       $ref: '#/definitions/Category'
+ *   responses:
+ *    200:
+ *     description: Success
+ *    500:
+ *     description: Error in operation
+ */
 router.post('/create_category', async(req,res) => {
     const categoryName = req.body.categoryName;
     Category.create({
@@ -22,6 +51,25 @@ router.post('/create_category', async(req,res) => {
         })
     })
 })
+
+
+/**
+ * @swagger
+ * /api/company/get_categories:
+ *  get:
+ *   summary: Get a list of all categories
+ *   description: This is some description about getting all categories
+ *   tags: [Store]
+ *   responses:
+ *    200:
+ *     description: Success
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: array
+ *    500:
+ *     description: Error in this operation
+ */
 router.get('/get_categories', async(req,res) => {
     Category.findAll()
     .then(categories => {
@@ -35,6 +83,44 @@ router.get('/get_categories', async(req,res) => {
         })
     })
 })
+
+/**
+ * @swagger
+ * /api/company/get_category_by_id/{id}:
+ *  get:
+ *   summary: Get single category by category id
+ *   description: Get single category by category id
+ *   tags: [Store]
+ *   parameters:
+ *    - in: path
+ *      name: id
+ *      schema:
+ *       type: string
+ *      required: true
+ *      description: Type the category id
+ *   responses:
+ *    200:
+ *     description: Success
+ *    500:
+ *     description: Error in operation
+ */
+router.get('/get_category_by_id/:id', async(req,res) => {
+    const categoryId = req.params.id;
+    Category.findByPk(categoryId)
+    .then(category => {
+        return res.status(200).json({
+            message: category
+        })
+    })
+    .catch(error => {
+        return res.status(500).json({
+            message: error.message
+        })
+    })
+})
+
+
+
 router.put('/update_category', async(req,res) => {
 
 })

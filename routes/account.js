@@ -5,9 +5,65 @@ import Account from '../models/account.js';
 import jwt from 'jsonwebtoken';
 import isAuth from './auth.js';
 
-//CRUD :: Create Read Update Delete
+/**
+ * @swagger
+ * definitions:
+ *  Login:
+ *   type: object
+ *   properties:
+ *    email:
+ *     type: string,
+ *     description: The user email address
+ *     example: eli@qwamo.com
+ *    password:
+ *     type: string
+ *     description: The user password
+ *     example: 123456
+ *  Verify:
+ *   type: object
+ *   properties:
+ *    email:
+ *     type: string
+ *     example: eli@qwamo.com
+ *    code:
+ *     type: int
+ *     example: 1111
+ *  Account:
+ *   type: object
+ *   properties:
+ *    firstName:
+ *     type: string
+ *     example: Elihu
+ *    lastName:
+ *     type: string
+ *     example: Chitrit
+ *    email:
+ *     type: string
+ *     example: eli@qwamo.com
+ *    password:
+ *     type: string
+ *     example: 123456
+ */
 
-//CREATE NEW ACCOUNT
+
+/**
+ * @swagger
+ * /api/account/create_new_account:
+ *  post:
+ *   summary: Create new account
+ *   description: Use this route to signup and create credential
+ *   tags: [Account]
+ *   requestBody:
+ *    content:
+ *     application/json:
+ *      schema:
+ *       $ref: '#/definitions/Account'
+ *   responses:
+ *    200:
+ *     description: Success
+ *    500:
+ *     description: Error in operation
+ */
 router.post('/create_new_account', async(req,res) => {
 
     //Get user data
@@ -54,6 +110,25 @@ router.post('/create_new_account', async(req,res) => {
     })
 })
 
+
+/**
+ * @swagger
+ * /api/account/verify:
+ *  put:
+ *   summary: Verify new account
+ *   description: Use this route to verify new account
+ *   tags: [Account]
+ *   requestBody:
+ *    content:
+ *     application/json:
+ *      schema:
+ *       $ref: '#/definitions/Verify'
+ *   responses:
+ *    200:
+ *     description: Success
+ *    500:
+ *     description: Error in operation
+ */
 router.put('/verify', async(req,res) => {
     const {email,code} = req.body;
     Account.findAll({where: {email:email}})
@@ -86,7 +161,27 @@ router.put('/verify', async(req,res) => {
     })
 })
 
-//FRIDAY
+
+
+
+/**
+ * @swagger
+ * /api/account/login:
+ *  post:
+ *   summary: Create login
+ *   description: Use this route to login and create credential
+ *   tags: [Account]
+ *   requestBody:
+ *    content:
+ *     application/json:
+ *      schema:
+ *       $ref: '#/definitions/Login'
+ *   responses:
+ *    200:
+ *     description: Success
+ *    500:
+ *     description: Error in operation
+ */
 router.post('/login', async(req,res) => {
     //Get data
     const {email,password} = req.body;
@@ -138,7 +233,23 @@ router.post('/login', async(req,res) => {
 })
 
 
-//GET ALL ACCOUNTS
+/**
+ * @swagger
+ * /api/account/get_all_users:
+ *  get:
+ *   summary: Get a list of all users
+ *   description: This is some description about getting all users
+ *   tags: [Account]
+ *   responses:
+ *    200:
+ *     description: Success
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: array
+ *    500:
+ *     description: Error in this operation
+ */
 router.get('/get_all_users', isAuth, async(req, res) => {
 
     Account.findAll()
@@ -153,6 +264,8 @@ router.get('/get_all_users', isAuth, async(req, res) => {
         })
     })
 })
+
+
 
 
 //UPDATE ACCOUNT
