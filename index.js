@@ -1,13 +1,21 @@
 import express from 'express';
+//IMPORT API CONTROLLERS
 import Accounts from './routes/account.js';
 import Company from './routes/company.js';
 import Store from './routes/store.js';
+
+//IMPORT ADMIN WEBSITE CONTROLLERS
+import Admin from './controllers/admin.js';
+
 import Database from './database.js';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUiExpress from 'swagger-ui-express';
 
 const app = express();
 app.use(express.json());
+
+app.set('view engine','ejs');
+app.set('views','views');
 
 const options = {
     definition: {
@@ -45,6 +53,8 @@ app.use('/api-doc', swaggerUiExpress.serve, swaggerUiExpress.setup(swaggerSpec))
 app.use('/api/account', Accounts);
 app.use('/api/company', Company);
 app.use('/api/store', Store);
+
+app.use('/admin', Admin);
 
 const port = 3001;
 
