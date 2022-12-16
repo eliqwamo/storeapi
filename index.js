@@ -1,4 +1,5 @@
 import express from 'express';
+import bodyParser from 'body-parser';
 //IMPORT API CONTROLLERS
 import Accounts from './routes/account.js';
 import Company from './routes/company.js';
@@ -12,6 +13,7 @@ import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUiExpress from 'swagger-ui-express';
 
 const app = express();
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.json());
 
 app.set('view engine','ejs');
