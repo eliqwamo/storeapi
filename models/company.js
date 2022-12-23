@@ -14,8 +14,7 @@ const Company = Database.define('company', {
     city: Sequelize.STRING,
     phone: Sequelize.STRING,
     email: Sequelize.STRING,
-    bio: Sequelize.TEXT,
-    categoryId: Sequelize.INTEGER
+    bio: Sequelize.TEXT
 })
 
 export default Company;
