@@ -14,54 +14,8 @@
 
     <div class="container" style="margin-top: 50px;">
         <div class="row">
-            <div class="col-lg-3">
-                <h5>Add new Product</h5><br/>
 
-
-
-                <form method="post" action="/admin/create_new_product">
-
-                    <label for="productName" class="form-label">Product name</label>
-                    <input type="text" class="form-control" name="productName" id="productName">
-
-                    <label for="productPrice" class="form-label">Product price</label>
-                    <input type="text" class="form-control" name="productPrice" id="productPrice">
-
-                    <label for="productImage" class="form-label">Product image</label>
-                    <input type="text" class="form-control" name="productImage" id="productImage">
-
-                    <label for="unitInStock" class="form-label">Unit in stock</label>
-                    <input type="text" class="form-control" name="unitInStock" id="unitInStock">
-
-                    <label for="categoryId" class="form-label">Category name</label>
-                    <select class="form-control" id="categoryId" name="categoryId">
-                        <%for(let category of categories){%>
-                            <option value="<%= category.id%>"><%= category.categoryName%></option>
-                        <%}%>
-                    </select>
-                    
-
-                    <label for="companyId" class="form-label">Company name</label>
-                    <select class="form-control" id="companyId" name="companyId">
-                        <option>Please select company...</option>
-                        <%for(let company of companies){%>
-                            <option value="<%= company.id%>"><%= company.companyName%></option>
-                        <%}%>
-                    </select>
-
-                    
-                    <label for="unitInStock" class="form-label">Description</label>
-                    <textarea class="form-control" name="productDescription" id="productDescription"></textarea>
-
-                    <br/>
-                    <button type="submit" class="btn btn-info">ADD</button>
-                </form>
-
-
-
-
-            </div>
-            <div class="col-lg-9">
+            <div class="col-lg-12">
                 <h5>Products list</h5><br/>
 
                 <table class="table table-striped">

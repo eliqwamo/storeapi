@@ -27,16 +27,39 @@ router.get('/categories', async(req,res) => {
 
 
 router.get('/companies', async(req,res) => {
+
+
+
     Company.findAll()
-    .then(companies => {
+    .then(async companies => {
+
+        const products = await Product.findAll();
+
+        //companies
+        //products
+
+        let companiesAndProducts = [];
+
+        companies.forEach(company => {
+            const companyProducts = products.filter(x => x.companyId == company.id);
+            let companyItem = {
+                companyInfo: company,
+                products: companyProducts
+            };
+            companiesAndProducts.push(companyItem);
+        })
+
+        //console.log(JSON.stringify(companiesAndProducts));
         res.render('companies', {
-            companies: companies
+            companiesAndProducts: companiesAndProducts
         })
     })
     .catch(error => {
 
     })
 })
+
+
 
 
 router.get('/products', async(req,res) => {
@@ -58,8 +81,6 @@ router.get('/products', async(req,res) => {
 })
 
 
-
-
 router.get('/store', async(req,res) => {
     res.render('store', {
         student_name: 'Tali',
@@ -67,7 +88,53 @@ router.get('/store', async(req,res) => {
     })
 })
 
+router.get('/companies/products/:id', async(req,res) => {
 
+    const companyId = req.params.id;
+    const products = await Product.findAll({where: {companyId: companyId}})
+    res.render('company_products', {
+        products: products
+    })
+})
+
+router.get('/products/:id', async(req,res) => {
+    const productId = req.params.id;
+    const product = await Product.findByPk(productId);
+    res.render('product_details', {
+        product: product
+    })
+})
+
+
+router.post('/create_new_product', async(req,res) => {
+    const {
+        productName,
+        productPrice,
+        productDescription,
+        productImage,
+        unitInStock,
+        categoryId,
+        companyId
+    } = req.body;
+
+    Product.create({
+        productName: productName,
+        productPrice: productPrice,
+        productDescription: productDescription,
+        productImage: productImage,
+        unitInStock: unitInStock,
+        categoryId: categoryId,
+        companyId: companyId
+    })
+    .then(product_created => {
+        console.log(product_created);
+        res.redirect('/admin/products');
+    })
+    .catch(error => {
+        res.redirect('/admin/products');
+        console.log(error);
+    })
+})
 
 router.post('/create_new_company', async(req,res) => {
     const {
@@ -111,9 +178,9 @@ router.get('/remove_category/:id', async(req,res) => {
         console.log(error.message);
         res.redirect('/admin/categories');
     })
-
-
 })
+
+
 router.post('/create_new_category', async(req,res) => {
     const categoryName = req.body.categoryName;
     Category.create({

@@ -45,16 +45,30 @@
                     <thead>
                         <tr>
                           <th scope="col">id</th>
+                          <th>Logo</th>
                           <th scope="col">Company name</th>
+                          <th>Email</th>
+                          <th>Actions</th>
                         </tr>
                       </thead>
 
                       <tbody>
-                        <%if(companies.length > 0){%>
-                            <%for(let company of companies){%>
+                        <%if(companiesAndProducts.length > 0){%>
+                            <%for(let company of companiesAndProducts){%>
                                 <tr>
-                                    <th scope="row"><%= company.id %></th>
-                                    <td><%= company.companyName %></td>
+                                    <td scope="row"><%= company.companyInfo.id %></td>
+                                    <td><img style="width: 50px;" src="<%= company.companyInfo.companyLogo%>" /></td>
+                                    <td><%= company.companyInfo.companyName %></td>
+                                    <td><%= company.companyInfo.email %></td>
+                                    <td>
+                                        <a href="/admin/companies/<%= company.companyInfo.id %>" 
+                                            class="btn btn-outline-info btn-sm">Edit</a>
+                                        <a href="/admin/remove_company/<%= company.companyInfo.id %>"
+                                            onclick="return confirm('Confirm company delete?');" 
+                                            class="btn btn-outline-danger btn-sm">Delete</a>
+                                        <a href="/admin/companies/products/<%= company.companyInfo.id %>" 
+                                            class="btn btn-outline-success btn-sm"><%= company.products.length %> Products</a>
+                                    </td>
                                   </tr>
                             <%}%>
                         <%} else {%>
